@@ -111,10 +111,44 @@ public class DoubleLinkedList<T> implements java.util.List{
         throw new UnsupportedOperationException("Unimplemented method 'listIterator'");
     }
 
-    @Override
-    public List<Object> subList(int fromIndex, int toIndex) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'subList'");
+   @Override
+    public List<T> subList(int fromIndex, int toIndex) {
+        if (fromIndex < 0 || toIndex > size || fromIndex > toIndex) {
+            throw new IndexOutOfBoundsException("indices fuera de rango");
+        }
+        DoubleLinkedList<T> list = new DoubleLinkedList<>();
+        Node<T> current = head;
+        current = searchOrder(current, fromIndex);
+        for (int i = fromIndex; i < toIndex; i++) {
+            list.add(current.getData());
+            current = current.getNext();
+        }
+        return list;
+    }
+
+    private Node<T> searchOrder(Node<T> current, int fromIndex) {
+        if (fromIndex < size / 2) {
+            current = head;
+            orderFromHead(current, fromIndex);
+        } else {
+            current = tail;
+            orderFromTail(current, fromIndex);
+        }
+        return current;
+    }
+
+    private Node<T> orderFromHead(Node<T> current, int fromIndex) {
+        for (int i = 0; i < fromIndex; i++) {
+            current = current.getNext();
+        }
+        return current;
+    }
+
+    private Node<T> orderFromTail(Node<T> current, int fromIndex) {
+        for (int i = size - 1; i > fromIndex; i--) {
+            current = current.getPrevius();
+        }
+        return current;
     }
 
     @Override
